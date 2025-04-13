@@ -50,16 +50,16 @@ The goal is to demonstrate a production-style deployment of an OpenShift-compati
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/yourusername/okd-aws-cluster.git
-cd okd-aws-cluster
+git clone https://github.com/manupanand-freelance-developer/selfmanaged-okd-openshift-cluster-prjt-15-2025.git
+cd selfmanaged-okd-openshift-cluster-prjt-15-2025
 ```
 
 ### 2. Configure Terraform
 
 ```bash
 cd terraform
-terraform init
-terraform apply
+terraform init -backend-config=env-dev/state.tfvars
+terraform apply -var-file=env-dev/main.tfvars -auto-approve
 ```
 
 This will create:
@@ -72,16 +72,20 @@ This will create:
 
 - Start Vault on a local machine or EC2
 - Store secrets (certs, tokens)
-
+- prefer vault operations using github actions
+or 
 ```bash
 vault kv put secret/okd/kubeadmin-password password=<strongpassword>
 ```
 
 ### 4. Run Ansible Playbooks
+by default terraform initate user script while provisioning which will ensure dependencies installation
+
+or 
 
 ```bash
 cd ansible
-ansible-playbook install-okd.yml -i inventory/aws_ec2.yml
+ansible-playbook playbook.yaml -e role_name
 ```
 
 This sets up:
